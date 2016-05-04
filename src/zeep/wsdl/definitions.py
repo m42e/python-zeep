@@ -279,9 +279,9 @@ class Port(object):
     def __unicode__(self):
         return 'Port: %s' % self.name
 
-    def send(self, transport, operation, args, kwargs):
+    def send(self, transport, operation, headers, args, kwargs):
         return self.binding.send(
-            transport, self.binding_options, operation, args, kwargs)
+            transport, self.binding_options, headers, operation, args, kwargs)
 
     @classmethod
     def parse(cls, wsdl, xmlelement):
