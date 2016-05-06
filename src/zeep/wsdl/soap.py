@@ -39,13 +39,19 @@ class SoapBinding(Binding):
             envelope.append(header)
         if headers is not None:
             soap_headers=soap.Header()
-            for k,v in headers.items():
-                elem = etree.SubElement(soap_headers, '{{{1}}}{0}'.format(k, nsmap['ns0']))
-                elem.text=v
+            self._add_headers(soap_headers, headers)
             envelope.append(soap_headers)
         if body is not None:
             envelope.append(body)
         return envelope
+
+    def _add_headers(self, element, headers):
+        for k,v in headers.items():
+            elem = etree.SubElement(element, k)
+            if type(v) is dict:
+                self._add_headers(elem, v);
+            else:
+                elem.text=str(v)
 
     def send(self, transport, options, headers, operation, args, kwargs):
         """Called from the service"""
